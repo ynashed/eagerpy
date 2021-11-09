@@ -36,8 +36,48 @@ def pow(t: TensorType, exponent: TensorOrScalar) -> TensorType:
     return t.pow(exponent)
 
 
+def sin(t: TensorType) -> TensorType:
+    return t.sin()
+
+
+def cos(t: TensorType) -> TensorType:
+    return t.cos()
+
+
+def tan(t: TensorType) -> TensorType:
+    return t.tan()
+
+
+def arcsin(t: TensorType) -> TensorType:
+    return t.arcsin()
+
+
+def arccos(t: TensorType) -> TensorType:
+    return t.arccos()
+
+
+def arctan(t: TensorType) -> TensorType:
+    return t.arctan()
+
+
+def sinh(t: TensorType) -> TensorType:
+    return t.sinh()
+
+
+def cosh(t: TensorType) -> TensorType:
+    return t.cosh()
+
+
 def tanh(t: TensorType) -> TensorType:
     return t.tanh()
+
+
+def arcsinh(t: TensorType) -> TensorType:
+    return t.arcsinh()
+
+
+def arccosh(t: TensorType) -> TensorType:
+    return t.arccosh()
 
 
 def arctanh(t: TensorType) -> TensorType:
@@ -380,3 +420,7 @@ def take_along_axis(t: TensorType, indices: TensorType, axis: int) -> TensorType
 
 def flatten(t: TensorType, start: int = 0, end: int = -1) -> TensorType:
     return t.flatten(start=start, end=end)
+
+
+def inv(t: TensorType) -> TensorType:
+    return t.inv()

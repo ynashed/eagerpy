@@ -58,9 +58,6 @@ class PyTorchTensor(BaseTensor):
     def raw(self) -> "torch.Tensor":
         return cast(torch.Tensor, super().raw)
 
-    def tanh(self: TensorType) -> TensorType:
-        return type(self)(torch.tanh(self.raw))
-
     def numpy(self: TensorType) -> Any:
         a = self.raw.detach().cpu().numpy()
         if a.flags.writeable:
@@ -90,12 +87,41 @@ class PyTorchTensor(BaseTensor):
     def square(self: TensorType) -> TensorType:
         return type(self)(self.raw ** 2)
 
+    def sin(self: TensorType) -> TensorType:
+        return type(self)(torch.sin(self.raw))
+
+    def cos(self: TensorType) -> TensorType:
+        return type(self)(torch.cos(self.raw))
+
+    def tan(self: TensorType) -> TensorType:
+        return type(self)(torch.tan(self.raw))
+
+    def sinh(self: TensorType) -> TensorType:
+        return type(self)(torch.sinh(self.raw))
+
+    def cosh(self: TensorType) -> TensorType:
+        return type(self)(torch.cosh(self.raw))
+
+    def tanh(self: TensorType) -> TensorType:
+        return type(self)(torch.tanh(self.raw))
+
+    def arcsin(self: TensorType) -> TensorType:
+        return type(self)(torch.asin(self.raw))
+
+    def arccos(self: TensorType) -> TensorType:
+        return type(self)(torch.acos(self.raw))
+
+    def arctan(self: TensorType) -> TensorType:
+        return type(self)(torch.atan(self.raw))
+
+    def arcsinh(self: TensorType) -> TensorType:
+        return type(self)(torch.asinh(self.raw))
+
+    def arccosh(self: TensorType) -> TensorType:
+        return type(self)(torch.acosh(self.raw))
+
     def arctanh(self: TensorType) -> TensorType:
-        """
-        improve once this issue has been fixed:
-        https://github.com/pytorch/pytorch/issues/10324
-        """
-        return type(self)(0.5 * (torch.log1p(self.raw) - torch.log1p(-self.raw)))
+        return type(self)(torch.atanh(self.raw))
 
     def unique(self: TensorType) -> TensorType:
         return type(self)(self.raw.unique())
@@ -204,7 +230,7 @@ class PyTorchTensor(BaseTensor):
         return type(self)(self.raw.argsort(dim=axis))
 
     def sort(self: TensorType, axis: int = -1) -> TensorType:
-        return type(self)(self.raw.sort(dim=axis).values)  # type: ignore
+        return type(self)(self.raw.sort(dim=axis).values)
 
     def topk(
         self: TensorType, k: int, sorted: bool = True
@@ -462,7 +488,7 @@ class PyTorchTensor(BaseTensor):
         return type(self)(torch.isnan(self.raw))
 
     def isinf(self: TensorType) -> TensorType:
-        return type(self)(torch.isinf(self.raw))  # type: ignore
+        return type(self)(torch.isinf(self.raw))
 
     def crossentropy(self: TensorType, labels: TensorType) -> TensorType:
         if self.ndim != 2:
@@ -534,6 +560,9 @@ class PyTorchTensor(BaseTensor):
 
     def sqrt(self: TensorType) -> TensorType:
         return type(self)(torch.sqrt(self.raw))
+
+    def inv(self: TensorType) -> TensorType:
+        return type(self)(torch.linalg.inv(self.raw))
 
     def float32(self: TensorType) -> TensorType:
         return self.astype(torch.float32)

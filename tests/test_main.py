@@ -239,6 +239,19 @@ def test_transpose_1d(dummy: Tensor) -> None:
     assert (ep.transpose(t) == t).all()
 
 
+def test_inv(dummy: Tensor) -> None:
+    x_list = [[1, -1, 0], [2, -3, 1], [-2, 0, 1]]
+    x = ep.from_numpy(dummy, np.array(x_list, dtype=float))
+    n_list = [[-3, 1, -1], [-4, 1, -1], [-6, 2, -1]]
+    n = ep.from_numpy(dummy, np.array(n_list, dtype=float))
+    t = ep.inv(x)
+
+    t = t.numpy()
+    n = n.numpy()
+    assert t.shape == n.shape
+    np.testing.assert_allclose(t, n, rtol=1e-6)
+
+
 def test_onehot_like_raises(dummy: Tensor) -> None:
     t = ep.arange(dummy, 18).float32().reshape((6, 3))
     indices = ep.arange(t, 6) // 2
@@ -496,27 +509,27 @@ def test_square(t: Tensor) -> Tensor:
     return ep.square(t)
 
 
-@compare_allclose
+@compare_allclose(rtol=1e-6)
 def test_pow(t: Tensor) -> Tensor:
     return ep.pow(t, 3)
 
 
-@compare_allclose
+@compare_allclose(rtol=1e-6)
 def test_pow_float(t: Tensor) -> Tensor:
     return ep.pow(t, 2.5)
 
 
-@compare_allclose
+@compare_allclose(rtol=1e-6)
 def test_pow_op(t: Tensor) -> Tensor:
     return t ** 3
 
 
-@compare_allclose
+@compare_allclose(rtol=1e-5)
 def test_pow_tensor(t: Tensor) -> Tensor:
     return ep.pow(t, (t + 0.5))
 
 
-@compare_allclose
+@compare_allclose(rtol=1e-5)
 def test_pow_op_tensor(t: Tensor) -> Tensor:
     return t ** (t + 0.5)
 
@@ -736,7 +749,7 @@ def test_take_along_axis_3d(dummy: Tensor) -> Tensor:
     return ep.take_along_axis(t, indices, axis=-1)
 
 
-@compare_all
+@compare_allclose
 def test_sqrt(t: Tensor) -> Tensor:
     return ep.sqrt(t)
 
@@ -1003,12 +1016,66 @@ def test_log1p(t: Tensor) -> Tensor:
 
 
 @compare_allclose(rtol=1e-6)
+def test_sin(t: Tensor) -> Tensor:
+    return ep.sin(t)
+
+
+@compare_allclose(rtol=1e-6)
+def test_cos(t: Tensor) -> Tensor:
+    return ep.cos(t)
+
+
+@compare_allclose(rtol=1e-6)
+def test_tan(t: Tensor) -> Tensor:
+    return ep.tan(t)
+
+
+@compare_allclose(rtol=1e-6)
+def test_sinh(t: Tensor) -> Tensor:
+    return ep.sinh(t)
+
+
+@compare_allclose(rtol=1e-6)
+def test_cosh(t: Tensor) -> Tensor:
+    return ep.cosh(t)
+
+
+@compare_allclose(rtol=1e-6)
 def test_tanh(t: Tensor) -> Tensor:
     return ep.tanh(t)
 
 
 @compare_allclose(rtol=1e-6)
+def test_arcsin(t: Tensor) -> Tensor:
+    # domain is [-1, 1]
+    return ep.arcsin((t - t.mean()) / t.max())
+
+
+@compare_allclose(rtol=1e-6)
+def test_arccos(t: Tensor) -> Tensor:
+    # domain is [-1, 1]
+    return ep.arccos((t - t.mean()) / t.max())
+
+
+@compare_allclose(rtol=1e-6)
+def test_arctan(t: Tensor) -> Tensor:
+    return ep.arctan(t)
+
+
+@compare_allclose(rtol=1e-6)
+def test_arcsinh(t: Tensor) -> Tensor:
+    return ep.arcsinh(t)
+
+
+@compare_allclose(rtol=1e-6)
+def test_arccosh(t: Tensor) -> Tensor:
+    # domain is [1, inf)
+    return ep.arccosh(1 + t - t.min())
+
+
+@compare_allclose(rtol=1e-6)
 def test_arctanh(t: Tensor) -> Tensor:
+    # domain is [-1, 1]
     return ep.arctanh((t - t.mean()) / t.max())
 
 @compare_allclose
@@ -1579,12 +1646,12 @@ def test_norms_l0(t: Tensor) -> Tensor:
     return t.norms.l0()
 
 
-@compare_all
+@compare_allclose
 def test_norms_l1(t: Tensor) -> Tensor:
     return t.norms.l1()
 
 
-@compare_all
+@compare_allclose
 def test_norms_l2(t: Tensor) -> Tensor:
     return t.norms.l2()
 
@@ -1594,11 +1661,11 @@ def test_norms_linf(t: Tensor) -> Tensor:
     return t.norms.linf()
 
 
-@compare_all
+@compare_allclose
 def test_norms_lp(t: Tensor) -> Tensor:
     return t.norms.lp(2)
 
 
-@compare_all
+@compare_allclose
 def test_norms_cache(t: Tensor) -> Tensor:
     return t.norms.l1() + t.norms.l2()
