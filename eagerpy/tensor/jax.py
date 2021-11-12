@@ -128,7 +128,7 @@ class JAXTensor(BaseTensor):
         return type(self)(jnp.square(self.raw))
 
     def unique(self: TensorType) -> TensorType:
-        return type(self)(np.unique(self.raw))
+        return type(self)(jnp.unique(self.raw))
 
     def sum(
         self: TensorType, axis: Optional[AxisAxes] = None, keepdims: bool = False
